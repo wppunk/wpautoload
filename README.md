@@ -40,7 +40,7 @@ or create it yourself:
  * @wordpress-plugin
  */
 
- require_once plugin_dir_path( __FILE__ ) . 'WP-Autoload/wp-autoload.php
+require_once plugin_dir_path( __FILE__ ) . 'WP-Autoload/wp-autoload.php';
 ```
 
 ## Customize
@@ -49,13 +49,13 @@ In file ```classes/class-autoload.php``` you can change:
 - prefix your namespaces:
 
 ```php
-private $prefix = 'My_New_Prefix_';
+$prefix = 'My_New_Prefix_';
 ```
 
 - folders for searching classes:
 
 ```php
-private $folders = [
+$folders = [
     WP_CONTENT_DIR . '/plugins/',
     WP_CONTENT_DIR . '/themes/',
 ];
