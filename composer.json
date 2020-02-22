@@ -1,0 +1,29 @@
+{
+    "name": "mdenisenko/wp-autoload",
+    "description": "Autoload your classes, interfaces and traits in WordPress mu-plugins, plugins and themes",
+    "type": "wordpress-mu-plugin",
+    "license": "GPL2",
+    "authors": [
+        {
+            "name": "mdenisenko",
+            "email": "mdenisenko95@gmail.com"
+        }
+    ],
+    "keywords": [
+        "mdenisenko", "composer", "autoload", "wordpress", "wp", "wp-config", "wordpress-plugin"
+    ],
+    "minimum-stability": "dev",
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^2.2"
+    },
+    "autoload": {
+        "classmap": [
+            "classes"
+        ]
+    }
+}
