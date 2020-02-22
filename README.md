@@ -3,15 +3,13 @@ Autoload for your classes, interfaces and traits in mu-plugins, plugins and them
 
 ## Rules
 
-Your namespace must begin with the prefix "My_".
+- Your namespace must begin with the prefix **My_**.
+- Your class, interface or trait full name should be the same as the path to the directory:
 
-Your class, interface or trait full name should be the same as the path to the directory:
+### Examples:
 
-Examples:
-
-For namespace ```/My_Theme/Core/Test_Autoload/Some_Name``` path will be ```/wp-content/themes/my-theme/core/test-autoload/class-some-name.php```. 
-
-For namespace ```/My_Plugin/Core/Test_Autoload/Some_Name`` path will be ``/wp-content/plugins/my-plugin/core/test-autoload/interface-some-name.php```.
+1. For namespace ```/My_Theme/Core/Test_Autoload/Some_Name``` path will be ```/wp-content/themes/my-theme/core/test-autoload/class-some-name.php```. 
+2. For namespace ```/My_Plugin/Core/Test_Autoload/Some_Name`` path will be ``/wp-content/plugins/my-plugin/core/test-autoload/interface-some-name.php```.
 
 ## How use?
 
