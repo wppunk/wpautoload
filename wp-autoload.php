@@ -18,4 +18,11 @@ use WP_Autoload\Autoload;
 require_once plugin_dir_path( __FILE__ ) . 'classes/class-autoload.php';
 require_once plugin_dir_path( __FILE__ ) . 'classes/class-exception.php';
 
-new Autoload();
+new Autoload(
+	'My_',
+	[
+		WP_CONTENT_DIR . '/mu-plugins/',
+		WP_CONTENT_DIR . '/plugins/',
+		WP_CONTENT_DIR . '/themes/',
+	]
+);

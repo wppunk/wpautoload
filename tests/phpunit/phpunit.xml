@@ -1,0 +1,32 @@
+<phpunit
+        bootstrap="./bootstrap.php"
+        backupGlobals="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        beStrictAboutTestsThatDoNotTestAnything="false"
+>
+    <testsuites>
+        <testsuite name="WP-Autoload-tests">
+            <directory suffix=".php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../</directory>
+            <exclude>
+                <directory>../../.make</directory>
+                <directory>../../assets</directory>
+                <directory>../../css</directory>
+                <directory>../../dist</directory>
+                <directory>../../js</directory>
+                <directory>../../languages</directory>
+                <directory>../../lib</directory>
+                <directory>../../src</directory>
+                <directory>../../tests</directory>
+                <directory>../../vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
