@@ -13,6 +13,7 @@
 namespace WP_Autoload;
 
 use WP_Filesystem_Direct;
+use function wp_die;
 
 /**
  * Class Autoload
@@ -74,7 +75,7 @@ class Autoload {
 	 */
 	private function autoload( string $class ): void {
 		if ( 0 === strpos( $class, $this->prefix ) ) {
-			if ( $this->map[ $class ] && file_exists( $this->map[ $class ] ) ) {
+			if ( isset( $this->map[ $class ] ) && file_exists( $this->map[ $class ] ) ) {
 				require_once $this->map[ $class ];
 			} else {
 				$this->has_been_update = true;
