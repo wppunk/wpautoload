@@ -12,4 +12,10 @@
 
 use WP_Autoload\Autoload;
 
+/**
+ * Don't use composer on production.
+ */
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-autoload.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-exception.php';
+
 new Autoload();
