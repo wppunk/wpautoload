@@ -19,6 +19,7 @@
         }
     },
     "require-dev": {
-        "wp-coding-standards/wpcs": "^2.2"
+        "wp-coding-standards/wpcs": "^2.2",
+        "10up/wp_mock": "dev-master"
     }
 }

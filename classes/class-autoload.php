@@ -36,17 +36,13 @@ class Autoload {
 	 *
 	 * @var string
 	 */
-	private $prefix = 'My_';
+	private $prefix;
 	/**
 	 * List of folders for autoload
 	 *
 	 * @var array
 	 */
-	private $folders = [
-		WP_CONTENT_DIR . '/mu-plugins/',
-		WP_CONTENT_DIR . '/plugins/',
-		WP_CONTENT_DIR . '/themes/',
-	];
+	private $folders;
 	/**
 	 * Has the cache been updated
 	 *
@@ -56,9 +52,14 @@ class Autoload {
 
 	/**
 	 * Autoload constructor.
+	 *
+	 * @param string $prefix  Prefix for your namespace.
+	 * @param array  $folders List of folders for autoload.
 	 */
-	public function __construct() {
-		$this->map_file = __DIR__ . '/classmap.php';
+	public function __construct( string $prefix, array $folders ) {
+		$this->prefix   = $prefix;
+		$this->folders  = $folders;
+		$this->map_file = plugin_dir_path( __DIR__ ) . 'cache/classmap.php';
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$this->map = @include $this->map_file;
 		$this->map = is_array( $this->map ) ? $this->map : [];
