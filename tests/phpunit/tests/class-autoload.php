@@ -142,9 +142,7 @@ class Test_Autoload extends TestCase {
 			$this->folders,
 			$cache
 		);
-
 		$this->expectException( Error::class );
-
 		new Autoload_Fail();
 	}
 
