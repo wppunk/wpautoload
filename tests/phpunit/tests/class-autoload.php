@@ -108,19 +108,24 @@ class Test_Autoload extends TestCase {
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}
 
-//	public function test_fail_load() {
-//		WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
-//		WP_Mock::userFunction( 'wp_die', [ 'times' => 1, 'return' => die() ] );
-//		$cache = Mockery::mock( 'WP_Autoload\Cache' );
-//		$cache->shouldReceive( 'get' )->andReturn( '' );
-//
-//		$autoload = new Autoload(
-//			$this->prefix,
-//			$this->folders,
-//			$cache
-//		);
-//		new \Prefix\Autoload_Fail();
-//
-//	}
+	// phpcs:disable Squiz.PHP.CommentedOutCode.Found
+	/**
+	 * Ignore
+	 * public function test_fail_load() {
+	 * WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
+	 * WP_Mock::userFunction( 'wp_die', [ 'times' => 1, 'return' => die() ] );
+	 * $cache = Mockery::mock( 'WP_Autoload\Cache' );
+	 * $cache->shouldReceive( 'get' )->andReturn( '' );
+	 *
+	 * $autoload = new Autoload(
+	 * $this->prefix,
+	 * $this->folders,
+	 * $cache
+	 * );
+	 * new \Prefix\Autoload_Fail();
+	 *
+	 * }
+	 */
+	// phpcs:enable Squiz.PHP.CommentedOutCode.Found
 
 }

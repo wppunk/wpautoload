@@ -15,6 +15,7 @@
     <exclude-pattern>*/languages/*</exclude-pattern>
     <exclude-pattern>*/lib/*</exclude-pattern>
     <exclude-pattern>*/src/*</exclude-pattern>
+    <exclude-pattern>*/tests/phpunit/classes/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*.js</exclude-pattern>
     <exclude-pattern>*.mo</exclude-pattern>
