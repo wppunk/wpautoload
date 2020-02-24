@@ -11,6 +11,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use Prefix\Autoload_Fail;
 use Prefix\Autoload_Success_1;
 use Prefix\Autoload_Success_2;
 use WP_Autoload\Autoload;
@@ -25,17 +26,17 @@ class Test_Autoload extends TestCase {
 	/**
 	 * Setup test
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
-		\WP_Mock::setUp();
+		WP_Mock::setUp();
 	}
 
 	/**
 	 * End test
 	 */
-	public function tearDown() {
-		\WP_Mock::tearDown();
-		\Mockery::close();
+	public function tearDown(): void {
+		WP_Mock::tearDown();
+		Mockery::close();
 		parent::tearDown();
 	}
 
@@ -125,10 +126,15 @@ class Test_Autoload extends TestCase {
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}
 
+	/**
+	 * Test invalid class path.
+	 *
+	 * @noinspection PhpUndefinedClassInspection
+	 */
 	public function test_fail_load() {
-		\WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
-		\WP_Mock::userFunction( 'wp_die', [ 'times' => 1 ] );
-		$cache = \Mockery::mock( 'WP_Autoload\Cache' );
+		WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
+		WP_Mock::userFunction( 'wp_die', [ 'times' => 1 ] );
+		$cache = Mockery::mock( 'WP_Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( '' );
 
 		new Autoload(
@@ -137,9 +143,9 @@ class Test_Autoload extends TestCase {
 			$cache
 		);
 
-		$this->expectException(Error::class);
+		$this->expectException( Error::class );
 
-		new \Prefix\Autoload_Fail();
+		new Autoload_Fail();
 	}
 
 }
