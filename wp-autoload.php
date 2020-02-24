@@ -11,12 +11,14 @@
  */
 
 use WP_Autoload\Autoload;
+use WP_Autoload\Cache;
 
 /**
  * Don't use composer on production.
  */
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-autoload.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-cache.php';
 require_once plugin_dir_path( __FILE__ ) . 'classes/class-exception.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-autoload.php';
 
 new Autoload(
 	'My_',
@@ -24,5 +26,6 @@ new Autoload(
 		WP_CONTENT_DIR . '/mu-plugins/',
 		WP_CONTENT_DIR . '/plugins/',
 		WP_CONTENT_DIR . '/themes/',
-	]
+	],
+	new Cache()
 );

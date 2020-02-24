@@ -18,3 +18,6 @@ jobs:
 
     - name: WPCS validate
       run: vendor/bin/phpcs -p -s --colors --standard=phpcs.xml .
+
+    - name: PHPUnit tests
+      run: vendor/bin/phpunit -c test/phpunit/phpunit.xml

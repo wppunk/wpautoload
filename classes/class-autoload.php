@@ -12,7 +12,6 @@
 
 namespace WP_Autoload;
 
-use WP_Filesystem_Direct;
 use function wp_die;
 
 /**
@@ -20,18 +19,6 @@ use function wp_die;
  */
 class Autoload {
 
-	/**
-	 * Classmap file
-	 *
-	 * @var string
-	 */
-	private $map_file;
-	/**
-	 * Classmap
-	 *
-	 * @var array
-	 */
-	private $map;
 	/**
 	 * Prefix for your namespace
 	 *
@@ -45,27 +32,24 @@ class Autoload {
 	 */
 	private $folders;
 	/**
-	 * Has the cache been updated
+	 * Cache
 	 *
-	 * @var bool
+	 * @var Cache
 	 */
-	private $has_been_update = false;
+	private $cache;
 
 	/**
 	 * Autoload constructor.
 	 *
 	 * @param string $prefix  Prefix for your namespace.
 	 * @param array  $folders List of folders for autoload.
+	 * @param Cache  $cache   Cache.
 	 */
-	public function __construct( string $prefix, array $folders ) {
-		$this->prefix   = $prefix;
-		$this->folders  = $folders;
-		$this->map_file = plugin_dir_path( __DIR__ ) . 'cache/classmap.php';
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		$this->map = @include $this->map_file;
-		$this->map = is_array( $this->map ) ? $this->map : [];
+	public function __construct( string $prefix, array $folders, Cache $cache ) {
+		$this->prefix  = $prefix;
+		$this->folders = $folders;
+		$this->cache   = $cache;
 		spl_autoload_register( [ $this, 'autoload' ] );
-		add_action( 'shutdown', [ $this, 'update_cache' ] );
 	}
 
 	/**
@@ -75,20 +59,20 @@ class Autoload {
 	 */
 	private function autoload( string $class ): void {
 		if ( 0 === strpos( $class, $this->prefix ) ) {
-			if ( isset( $this->map[ $class ] ) && file_exists( $this->map[ $class ] ) ) {
-				require_once $this->map[ $class ];
+			$path = $this->cache->get( $class );
+			if ( $path ) {
+				require_once $path;
 			} else {
-				$this->has_been_update = true;
 				try {
 					$path = $this->file_path( $class );
-					// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-					$this->map[ $class ] = $path;
+					$this->cache->update( $class, $path );
 					require_once $path;
 				} catch ( Exception $e ) {
 					wp_die( wp_kses_post( $e->getMessage() ) );
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -116,50 +100,6 @@ class Autoload {
 		}
 
 		throw new Exception( $class, $this->folders );
-	}
-
-	/**
-	 * Create instance WP_Filesystem
-	 *
-	 * @return WP_Filesystem_Direct
-	 *
-	 * phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-	 */
-	private function WP_Filesystem(): WP_Filesystem_Direct {
-		//phpcs:enable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		global $wp_filesystem;
-		if ( null === $wp_filesystem ) {
-			if ( ! class_exists( 'WP_Filesystem_Base' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/file.php';
-				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
-			}
-			WP_Filesystem();
-		}
-
-		return new WP_Filesystem_Direct( null );
-	}
-
-	/**
-	 * Update classmap
-	 */
-	public function update_cache(): void {
-		if ( ! $this->has_been_update ) {
-			return;
-		}
-		$map = implode(
-			"\n",
-			array_map(
-				function ( $k, $v ) {
-					return "'$k' => '$v',";
-				},
-				array_keys( $this->map ),
-				array_values( $this->map )
-			)
-		);
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$filesystem = self::WP_Filesystem();
-		$filesystem->put_contents( $this->map_file, '<?php return [' . $map . '];' );
 	}
 
 }
