@@ -10,8 +10,8 @@
  * @wordpress-plugin
  */
 
+use PHPUnit\Framework\TestCase;
 use WP_Autoload\Cache;
-use WP_Mock\Tools\TestCase;
 
 require_once __DIR__ . '/../../../classes/class-cache.php';
 
@@ -19,6 +19,23 @@ require_once __DIR__ . '/../../../classes/class-cache.php';
  * Class Test_Cache
  */
 class Test_Cache extends TestCase {
+
+	/**
+	 * Setup test
+	 */
+	public function setUp() {
+		parent::setUp();
+		\WP_Mock::setUp();
+	}
+
+	/**
+	 * End test
+	 */
+	public function tearDown() {
+		\WP_Mock::tearDown();
+		\Mockery::close();
+		parent::tearDown();
+	}
 
 	/**
 	 * Test __construct

@@ -23,6 +23,23 @@ require_once __DIR__ . '/../../../classes/class-autoload.php';
 class Test_Autoload extends TestCase {
 
 	/**
+	 * Setup test
+	 */
+	public function setUp() {
+		parent::setUp();
+		\WP_Mock::setUp();
+	}
+
+	/**
+	 * End test
+	 */
+	public function tearDown() {
+		\WP_Mock::tearDown();
+		\Mockery::close();
+		parent::tearDown();
+	}
+
+	/**
 	 * Prefix for your namespace
 	 *
 	 * @var string
@@ -108,24 +125,21 @@ class Test_Autoload extends TestCase {
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}
 
-	// phpcs:disable Squiz.PHP.CommentedOutCode.Found
-	/**
-	 * Ignore
-	 * public function test_fail_load() {
-	 * WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
-	 * WP_Mock::userFunction( 'wp_die', [ 'times' => 1, 'return' => die() ] );
-	 * $cache = Mockery::mock( 'WP_Autoload\Cache' );
-	 * $cache->shouldReceive( 'get' )->andReturn( '' );
-	 *
-	 * $autoload = new Autoload(
-	 * $this->prefix,
-	 * $this->folders,
-	 * $cache
-	 * );
-	 * new \Prefix\Autoload_Fail();
-	 *
-	 * }
-	 */
-	// phpcs:enable Squiz.PHP.CommentedOutCode.Found
+	public function test_fail_load() {
+		\WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
+		\WP_Mock::userFunction( 'wp_die', [ 'times' => 1 ] );
+		$cache = \Mockery::mock( 'WP_Autoload\Cache' );
+		$cache->shouldReceive( 'get' )->andReturn( '' );
+
+		new Autoload(
+			$this->prefix,
+			$this->folders,
+			$cache
+		);
+
+		$this->expectException(Error::class);
+
+		new \Prefix\Autoload_Fail();
+	}
 
 }

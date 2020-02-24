@@ -20,6 +20,23 @@ require_once __DIR__ . '/../../../classes/class-exception.php';
 class Test_Exception extends TestCase {
 
 	/**
+	 * Setup test
+	 */
+	public function setUp() {
+		parent::setUp();
+		\WP_Mock::setUp();
+	}
+
+	/**
+	 * End test
+	 */
+	public function tearDown() {
+		\WP_Mock::tearDown();
+		\Mockery::close();
+		parent::tearDown();
+	}
+
+	/**
 	 * Test message
 	 */
 	public function test_message() {
