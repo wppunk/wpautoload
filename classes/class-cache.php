@@ -15,6 +15,7 @@ namespace WP_Autoload;
 use WP_Filesystem_Direct;
 use function add_action;
 use function plugin_dir_path;
+use function WP_Filesystem;
 
 /**
  * Class Cache
@@ -130,9 +131,11 @@ class Cache {
 		global $wp_filesystem;
 		if ( null === $wp_filesystem ) {
 			if ( ! class_exists( 'WP_Filesystem_Base' ) ) {
+				// @codeCoverageIgnoreStart
 				require_once ABSPATH . 'wp-admin/includes/file.php';
 				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+				// @codeCoverageIgnoreEnd
 			}
 			WP_Filesystem();
 		}

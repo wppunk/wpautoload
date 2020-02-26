@@ -10,6 +10,7 @@
  * @wordpress-plugin
  */
 
+use bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use WP_Autoload\Cache;
 
@@ -87,9 +88,10 @@ class Test_Cache extends TestCase {
 	 * Save cache
 	 */
 	public function test_save() {
-		global $wp_filesystem;
+		Mockery::mock( 'WP_Filesystem_Base' );
 		$wp_filesystem = Mockery::mock( 'overload:WP_Filesystem_Direct' );
 		$wp_filesystem->shouldReceive( 'put_contents' )->once();
+		WP_Mock::userFunction( 'WP_Filesystem', [ 'times' => 1 ] );
 
 		$cache = new Cache();
 		$cache->update( '\Prefix\Autoload_Success_1', __DIR__ . '/../classes/path-1/prefix/class-autoload-success-1.php' );

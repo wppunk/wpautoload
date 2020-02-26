@@ -20,6 +20,8 @@
     },
     "require-dev": {
         "wp-coding-standards/wpcs": "^2.2",
-        "10up/wp_mock": "dev-master"
+        "10up/wp_mock": "dev-master",
+        "php-coveralls/php-coveralls": "2.2.x-dev",
+        "mikey179/vfsstream": "^2.0@dev"
     }
 }

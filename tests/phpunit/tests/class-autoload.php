@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Prefix\Autoload_Fail;
 use Prefix\Autoload_Success_1;
 use Prefix\Autoload_Success_2;
+use Prefix\Autoload_Success_3;
+use Prefix\Autoload_Success_4;
 use WP_Autoload\Autoload;
 
 require_once __DIR__ . '/../../../classes/class-autoload.php';
@@ -114,14 +116,32 @@ class Test_Autoload extends TestCase {
 	 */
 	public function test_success_load_from_cache() {
 		$cache = Mockery::mock( 'WP_Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( __DIR__ . '/../classes/path-1/prefix/class-autoload-success-1.php' );
+		$cache->shouldReceive( 'get' )->andReturn( __DIR__ . '/../classes/path-1/prefix/class-autoload-success-4.php' );
 
 		$autoload = new Autoload(
 			$this->prefix,
 			$this->folders,
 			$cache
 		);
-		new Autoload_Success_1();
+		new Autoload_Success_4();
+
+		spl_autoload_unregister( [ $autoload, 'autoload' ] );
+	}
+
+	/**
+	 * Test loading interface
+	 */
+	public function test_success_load_interface() {
+		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache->shouldReceive( 'get' )->andReturn( '' );
+		$cache->shouldReceive( 'update' );
+
+		$autoload = new Autoload(
+			$this->prefix,
+			$this->folders,
+			$cache
+		);
+		new Autoload_Success_3();
 
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}

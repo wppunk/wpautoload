@@ -26,6 +26,7 @@
                 <directory>../../src</directory>
                 <directory>../../tests</directory>
                 <directory>../../vendor</directory>
+                <directory>../../wp-autoload.php</directory>
             </exclude>
         </whitelist>
     </filter>
