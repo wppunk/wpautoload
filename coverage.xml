@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1582699813">
-  <project timestamp="1582699813">
+<coverage generated="1582700329">
+  <project timestamp="1582700329">
     <package name="WP_Autoload">
       <file name="/Users/mdenisenko/PhpstormProjects/WP-Autoload/classes/class-autoload.php">
         <class name="WP_Autoload\Autoload" namespace="WP_Autoload">

@@ -24,8 +24,3 @@ jobs:
 
     - name: Tests coverage
       run: vendor/phpunit/phpunit/phpunit --configuration tests/phpunit/phpunit.xml --coverage-clover coverage.xml
-
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1.0.1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
