@@ -23,5 +23,5 @@ jobs:
       run: vendor/bin/phpunit -c tests/phpunit/phpunit.xml
 
     - name: Tests coverage
-      run: vendor/phpunit/phpunit/phpunit --configuration tests/phpunit/phpunit.xml --coverage-clover coverage.xml \
-          vendor/php-coveralls/php-coveralls/bin/php-coveralls -v
+      run: vendor/phpunit/phpunit/phpunit --configuration tests/phpunit/phpunit.xml --coverage-clover coverage.xml &&
+          php vendor/php-coveralls/php-coveralls/bin/php-coveralls -v
