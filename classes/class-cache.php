@@ -104,16 +104,10 @@ class Cache {
 		if ( ! $this->has_been_update ) {
 			return;
 		}
-		$map = implode(
-			"\n",
-			array_map(
-				function ( $k, $v ) {
-					return "'$k' => '$v',";
-				},
-				array_keys( $this->map ),
-				array_values( $this->map )
-			)
-		);
+		$map = '';
+		foreach ( $this->map as $key => $value ) {
+			$map .= "'$key' => '$value',\n";
+		}
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 		$filesystem = $this->WP_Filesystem();
 		if ( ! $filesystem->exists( dirname( $this->map_file ) ) ) {
