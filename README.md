@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/mdenisenko/WP-Autoload/badge.svg)](https://coveralls.io/github/mdenisenko/WP-Autoload)
 # WordPress Autoload
 Autoload for your classes, interfaces and traits in mu-plugins, plugins and themes.
 
