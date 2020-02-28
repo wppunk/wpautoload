@@ -44,19 +44,14 @@ require_once plugin_dir_path( __FILE__ ) . 'WP-Autoload/wp-autoload.php';
 ```
 
 ## Customize
-In file ```classes/class-autoload.php``` you can change:
 
-- prefix your namespaces:
+To change the prefix, use the constant: `WP_AUTOLOAD_PREFIX` type string.
 
-```php
-$prefix = 'My_New_Prefix_';
-```
+To change the folders, use the constant: `WP_AUTOLOAD_FOLDERS` type array.
 
-- folders for searching classes:
+Example:
 
 ```php
-$folders = [
-    WP_CONTENT_DIR . '/plugins/',
-    WP_CONTENT_DIR . '/themes/',
-];
+define( 'WP_AUTOLOAD_PREFIX', 'Custom_' );
+define( 'WP_AUTOLOAD_FOLDERS', [ WP_CONTENT_DIR . '/plugins/' ] );
 ```

@@ -20,12 +20,10 @@ require_once plugin_dir_path( __FILE__ ) . 'classes/class-cache.php';
 require_once plugin_dir_path( __FILE__ ) . 'classes/class-exception.php';
 require_once plugin_dir_path( __FILE__ ) . 'classes/class-autoload.php';
 
-new Autoload(
-	'My_',
-	[
-		WP_CONTENT_DIR . '/mu-plugins/',
-		WP_CONTENT_DIR . '/plugins/',
-		WP_CONTENT_DIR . '/themes/',
-	],
-	new Cache()
-);
+$prefix  = defined( 'WP_AUTOLOAD_PREFIX' ) ? WP_AUTOLOAD_PREFIX : 'Custom_';
+$folders = defined( 'WP_AUTOLOAD_FOLDERS' ) ? WP_AUTOLOAD_FOLDERS : [
+	WP_CONTENT_DIR . '/mu-plugins/',
+	WP_CONTENT_DIR . '/plugins/',
+	WP_CONTENT_DIR . '/themes/',
+];
+new Autoload( $prefix, $folders, new Cache() );
