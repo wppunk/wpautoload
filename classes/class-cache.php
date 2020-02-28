@@ -116,6 +116,9 @@ class Cache {
 		);
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 		$filesystem = $this->WP_Filesystem();
+		if ( ! $filesystem->exists( dirname( $this->map_file ) ) ) {
+			wp_mkdir_p( dirname( $this->map_file ) );
+		}
 		$filesystem->put_contents( $this->map_file, '<?php return [' . $map . '];' );
 	}
 

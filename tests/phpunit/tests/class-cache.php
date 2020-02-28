@@ -90,8 +90,10 @@ class Test_Cache extends TestCase {
 	public function test_save() {
 		Mockery::mock( 'WP_Filesystem_Base' );
 		$wp_filesystem = Mockery::mock( 'overload:WP_Filesystem_Direct' );
+		$wp_filesystem->shouldReceive( 'exists' )->once()->andReturn( false );
 		$wp_filesystem->shouldReceive( 'put_contents' )->once();
 		WP_Mock::userFunction( 'WP_Filesystem', [ 'times' => 1 ] );
+		WP_Mock::userFunction( 'wp_mkdir_p', [ 'times' => 1 ] );
 
 		$cache = new Cache();
 		$cache->update( '\Prefix\Autoload_Success_1', __DIR__ . '/../classes/path-1/prefix/class-autoload-success-1.php' );
