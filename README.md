@@ -13,7 +13,7 @@ Then add to the `composer.json`:
     ...
     "extra": {
 		"wp-autoload": {
-			"\Name\Space\": "src"
+			"\\Name\\Space\\": "src"
 		}
 	},
     ...

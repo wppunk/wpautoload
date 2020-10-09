@@ -14,9 +14,6 @@ use WPPunk\Autoload\Cache;
 use Composer\Json\JsonFile;
 use WPPunk\Autoload\Autoload;
 
-require_once 'vendor/autoload.php';
-
-
 $dir     = __DIR__ . '/../../../';
 $cache   = new Cache();
 $file    = new JsonFile( $dir . 'composer.json' );
