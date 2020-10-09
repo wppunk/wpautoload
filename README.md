@@ -9,50 +9,24 @@ Autoload for your classes, interfaces and traits in mu-plugins, plugins and them
 
 ### Examples:
 
-1. For namespace ```/My_Theme/Core/Test_Autoload/Some_Name``` path will be ```/wp-content/themes/my-theme/core/test-autoload/class-some-name.php```. 
-2. For namespace ```/My_Plugin/Core/Test_Autoload/Some_Name`` path will be ``/wp-content/plugins/my-plugin/core/test-autoload/interface-some-name.php```.
+1. For namespace `/My_Theme/Core/Test_Autoload/Some_Name` path will be `/wp-content/themes/my-theme/core/test-autoload/class-some-name.php`. 
+2. For namespace `/My_Plugin/Core/Test_Autoload/Some_Name` path will be `/wp-content/plugins/my-plugin/core/test-autoload/interface-some-name.php`.
 
 ## How use?
 
 ```
-cd /path/to/wp-content/mu-plugins/
-git clone https://github.com/mdenisenko/WP-Autoload.git
+composer require wppunk/wpautoload
 ```
-
-Then create a file in the mu-plugins folder to connect this plugin, use the bash script:
-
+And add to the `composer.json`:
 ```
-cd WP-Autoload/bash/
-bash create-bootstrap-file.sh
+{
+    ...
+    "extra": {
+		"wp-autoload": {
+			"\Name\Space\": "src"
+		}
+	},
+    ...
+}
 ```
-
-or create it yourself:
-
-```php
-<?php
-/**
- * WP-Autoload
- *
- * @package   WP-Autoload
- * @author    Maksym Denysenko
- * @link      https://github.com/mdenisenko/WP-Autoload
- * @copyright Copyright (c) 2020
- * @license   GPL-2.0+
- * @wordpress-plugin
- */
-
-require_once plugin_dir_path( __FILE__ ) . 'WP-Autoload/wp-autoload.php';
-```
-
-## Customize
-
-To change the prefix, use the constant: `WP_AUTOLOAD_PREFIX` type string.
-
-To change the folders, use the constant: `WP_AUTOLOAD_FOLDERS` type array.
-
-Example:
-
-```php
-define( 'WP_AUTOLOAD_PREFIX', 'Custom_' );
-define( 'WP_AUTOLOAD_FOLDERS', [ WP_CONTENT_DIR . '/plugins/' ] );
-```
+Where key it is namespace and value it is the folder name. 
