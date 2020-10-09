@@ -10,15 +10,15 @@
  * @wordpress-plugin
  */
 
-use PHPUnit\Framework\TestCase;
 use Prefix\Autoload_Fail;
-use Prefix\Autoload_Success_1;
+use WPPunk\Autoload\Autoload;
 use Prefix\Autoload_Success_2;
 use Prefix\Autoload_Success_3;
 use Prefix\Autoload_Success_4;
-use WP_Autoload\Autoload;
+use Prefix\Autoload_Success_1;
+use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../../classes/class-autoload.php';
+require_once __DIR__ . '/../../../src/class-autoload.php';
 
 /**
  * Class Test_Autoload
@@ -26,18 +26,9 @@ require_once __DIR__ . '/../../../classes/class-autoload.php';
 class Test_Autoload extends TestCase {
 
 	/**
-	 * Setup test
-	 */
-	public function setUp(): void {
-		parent::setUp();
-		WP_Mock::setUp();
-	}
-
-	/**
 	 * End test
 	 */
 	public function tearDown(): void {
-		WP_Mock::tearDown();
 		Mockery::close();
 		parent::tearDown();
 	}
@@ -47,45 +38,33 @@ class Test_Autoload extends TestCase {
 	 *
 	 * @var string
 	 */
-	private $prefix = 'Prefix';
+	const PREFIX = 'Prefix';
+
 	/**
-	 * List of folders for autoload
+	 * Path to first folder
 	 *
 	 * @var array
 	 */
-	private $folders = [
-		__DIR__ . '/../classes/path-1/',
-		__DIR__ . '/../classes/path-2/',
-	];
+	const FOLDER1 = __DIR__ . '/../classes/path-1/prefix';
 
 	/**
-	 * Test __construct
+	 * Path to second folder
+	 *
+	 * @var array
 	 */
-	public function test___construct() {
-		$cache          = Mockery::mock( 'WP_Autoload\Cache' );
-		$autoload_count = count( spl_autoload_functions() );
-
-		$autoload = new Autoload(
-			$this->prefix,
-			$this->folders,
-			$cache
-		);
-
-		$this->assertSame( ++ $autoload_count, count( spl_autoload_functions() ) );
-		spl_autoload_unregister( [ $autoload, 'autoload' ] );
-	}
+	const FOLDER2 = __DIR__ . '/../classes/path-2/prefix';
 
 	/**
 	 * Test success load class by path in first folder inside cache.
 	 */
 	public function test_success_load_by_first_path() {
-		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( '' );
 		$cache->shouldReceive( 'update' )->once();
 
 		$autoload = new Autoload(
-			$this->prefix,
-			$this->folders,
+			self::PREFIX,
+			self::FOLDER1,
 			$cache
 		);
 		new Autoload_Success_1();
@@ -97,13 +76,13 @@ class Test_Autoload extends TestCase {
 	 * Test success load class by path in second folder inside cache
 	 */
 	public function test_success_load_by_second_path() {
-		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( '' );
 		$cache->shouldReceive( 'update' )->once();
 
 		$autoload = new Autoload(
-			$this->prefix,
-			$this->folders,
+			self::PREFIX,
+			self::FOLDER2,
 			$cache
 		);
 		new Autoload_Success_2();
@@ -115,12 +94,12 @@ class Test_Autoload extends TestCase {
 	 * Test success load class from cache.
 	 */
 	public function test_success_load_from_cache() {
-		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( __DIR__ . '/../classes/path-1/prefix/class-autoload-success-4.php' );
 
 		$autoload = new Autoload(
-			$this->prefix,
-			$this->folders,
+			self::PREFIX,
+			self::FOLDER1,
 			$cache
 		);
 		new Autoload_Success_4();
@@ -129,16 +108,39 @@ class Test_Autoload extends TestCase {
 	}
 
 	/**
+	 * Test invalid namespace.
+	 */
+	public function test_invalid_namespace() {
+		$autoload = new Autoload(
+			self::PREFIX,
+			self::FOLDER1,
+			Mockery::mock( 'WPPunk\Autoload\Cache' )
+		);
+		function test_autoload( $class ) {
+			if ( 'Invalid_Name_Space' !== $class ) {
+				return;
+			}
+			require_once __DIR__ . '/../classes/path-1/class-invalid-name-space.php';
+		}
+
+		spl_autoload_register( 'test_autoload' );
+		new Invalid_Name_Space();
+
+		spl_autoload_unregister( [ $autoload, 'autoload' ] );
+		spl_autoload_unregister( 'test_autoload' );
+	}
+
+	/**
 	 * Test loading interface
 	 */
 	public function test_success_load_interface() {
-		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( '' );
 		$cache->shouldReceive( 'update' );
 
 		$autoload = new Autoload(
-			$this->prefix,
-			$this->folders,
+			self::PREFIX,
+			self::FOLDER1,
 			$cache
 		);
 		new Autoload_Success_3();
@@ -152,17 +154,15 @@ class Test_Autoload extends TestCase {
 	 * @noinspection PhpUndefinedClassInspection
 	 */
 	public function test_fail_load() {
-		WP_Mock::userFunction( 'wp_kses_post', [ 'times' => 1 ] );
-		WP_Mock::userFunction( 'wp_die', [ 'times' => 1 ] );
-		$cache = Mockery::mock( 'WP_Autoload\Cache' );
+		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
 		$cache->shouldReceive( 'get' )->andReturn( '' );
 
 		new Autoload(
-			$this->prefix,
-			$this->folders,
+			self::PREFIX,
+			self::FOLDER1,
 			$cache
 		);
-		$this->expectException( Error::class );
+		$this->expectException( WPPunk\Autoload\Exception::class );
 		new Autoload_Fail();
 	}
 

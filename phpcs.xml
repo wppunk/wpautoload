@@ -1,31 +1,38 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Plugin Coding Standards">
-    <description>A custom set of code standard rules to check for WordPress plugins.</description>
+<ruleset name="WPPunk Autoload">
+	<description>The code standard for WPPunk Autoload.</description>
+	<config name="testVersion" value="5.6-"/>
+	<exclude-pattern>\.codeception/*</exclude-pattern>
+	<exclude-pattern>\.github/*</exclude-pattern>
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modues/*</exclude-pattern>
+	<exclude-pattern>\.idea/*</exclude-pattern>
+	<exclude-pattern>cache/*</exclude-pattern>
 
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="100"/>
+	<arg name="cache" value=".phpcs.cache"/>
 
-    <rule ref="WordPress"/>
-    <!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
+	<rule ref="PHPCompatibility"/>
 
-    <exclude-pattern>*/.make/*</exclude-pattern>
-    <exclude-pattern>*/assets/*</exclude-pattern>
-    <exclude-pattern>*/css/*</exclude-pattern>
-    <exclude-pattern>*/dist/*</exclude-pattern>
-    <exclude-pattern>*/js/*</exclude-pattern>
-    <exclude-pattern>*/languages/*</exclude-pattern>
-    <exclude-pattern>*/lib/*</exclude-pattern>
-    <exclude-pattern>*/src/*</exclude-pattern>
-    <exclude-pattern>*/tests/phpunit/classes/*</exclude-pattern>
-    <exclude-pattern>*/vendor/*</exclude-pattern>
-    <exclude-pattern>*.js</exclude-pattern>
-    <exclude-pattern>*.mo</exclude-pattern>
-    <exclude-pattern>*.po</exclude-pattern>
-    <exclude-pattern>*.twig</exclude-pattern>
-    <exclude-pattern>*.css</exclude-pattern>
-    <exclude-pattern>*.scss</exclude-pattern>
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="complexity" value="3"/>
+			<property name="absoluteComplexity" value="5"/>
+		</properties>
+	</rule>
 
-    <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
-        <severity>0</severity>
-    </rule>
+	<rule ref="Generic.Metrics.NestingLevel">
+		<properties>
+			<property name="absoluteNestingLevel" value="3"/>
+		</properties>
+	</rule>
 
+	<!-- Allow short array syntax -->
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax.Found"/>
 </ruleset>

@@ -1,5 +1,5 @@
 .idea
 .DS_Store
 vendor
-test/.phpunit.result.cache
+tests/phpunit/.phpunit.result.cache
 cache

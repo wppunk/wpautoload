@@ -12,7 +12,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../../classes/class-exception.php';
+require_once __DIR__ . '/../../../src/class-exception.php';
 
 /**
  * Class Test_Exception
@@ -20,38 +20,15 @@ require_once __DIR__ . '/../../../classes/class-exception.php';
 class Test_Exception extends TestCase {
 
 	/**
-	 * Setup test
-	 */
-	public function setUp(): void {
-		parent::setUp();
-		WP_Mock::setUp();
-	}
-
-	/**
-	 * End test
-	 */
-	public function tearDown(): void {
-		WP_Mock::tearDown();
-		Mockery::close();
-		parent::tearDown();
-	}
-
-	/**
 	 * Test message
 	 */
 	public function test_message() {
 		$class     = 'My_Class\Some\Path';
-		$folders   = [
-			'/folder-1/',
-			'/folder-2/',
-		];
-		$exception = new \WP_Autoload\Exception( $class, $folders );
+		$folder    = '/folder-1/';
+		$exception = new \WPPunk\Autoload\Exception( $class, $folder );
 		$message   = $exception->getMessage();
 		$this->assertTrue( ! ! strpos( $message, $class ) );
-		foreach ( $folders as $folder ) {
-			$this->assertTrue( ! ! strpos( $message, $folder ) );
-		}
-
+		$this->assertTrue( ! ! strpos( $message, $folder ) );
 	}
 
 }

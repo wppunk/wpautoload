@@ -86,6 +86,27 @@ class Cache {
 			return;
 		}
 
+		$this->create_dir();
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+		file_put_contents( $this->map_file, '<?php return [' . $this->create_map() . '];' );
+	}
+
+	/**
+	 * Create cache directory.
+	 */
+	private function create_dir() {
+		if ( ! file_exists( dirname( $this->map_file ) ) ) {
+			mkdir( dirname( $this->map_file ), 0755, true );
+		}
+	}
+
+	/**
+	 * Create class map.
+	 *
+	 * @return string
+	 */
+	private function create_map() {
 		$map  = '';
 		$last = end( $this->map );
 		foreach ( $this->map as $key => $value ) {
@@ -94,26 +115,34 @@ class Cache {
 				$map .= ",\n";
 			}
 		}
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		if ( ! file_exists( dirname( $this->map_file ) ) ) {
-			mkdir( dirname( $this->map_file ), 0755, true );
-		}
 
-		file_put_contents( $this->map_file, '<?php return [' . $map . '];' );
+		return $map;
 	}
 
-	public function clear_garbage() {
-		if ( ! $this->map ) {
+	/**
+	 * Clear garbage classes
+	 */
+	private function clear_garbage() {
+		foreach ( $this->map as $key => $file ) {
+			$this->clear_class( $key, $file );
+		}
+	}
+
+	/**
+	 * Clear class
+	 *
+	 * @param string $class_name Class name.
+	 * @param string $path       Path to file.
+	 */
+	private function clear_class( $class_name, $path ) {
+		$path = realpath( $path );
+		if ( ! file_exists( $path ) ) {
+			unset( $this->map[ $class_name ] );
+
 			return;
 		}
-		foreach ( $this->map as $key => $file ) {
-			$file = realpath( $file );
-			if ( ! file_exists( $file ) ) {
-				unset( $this->map[ $key ] );
-			} else {
-				$this->map[ $key ] = $file;
-			}
-		}
+
+		$this->map[ $class_name ] = $path;
 	}
 
 }

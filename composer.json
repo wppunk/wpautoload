@@ -3,7 +3,6 @@
 	"description": "Autoload your classes, interfaces and traits in WordPress",
 	"type": "wordpress-autoload",
 	"license": "GPL-2.0-or-later",
-	"version": "1.0.0",
 	"authors": [
 		{
 			"name": "wppunk",
@@ -21,16 +20,25 @@
 	],
 	"autoload": {
 		"classmap": [
-			"classes"
+			"src"
 		],
 		"files": [
 			"wpautoload.php"
 		]
 	},
 	"require-dev": {
+		"wp-coding-standards/wpcs": "^2.3",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"brain/monkey": "^2.5",
+		"phpunit/phpunit": "^9.4"
+	},
+	"scripts": {
+		"cs": "phpcs --standard=phpcs.xml .",
+		"unit": "phpunit -c tests/phpunit/phpunit.xml"
 	},
 	"require": {
-		"php": "^5.6",
+		"php": "^5.6|^7.0",
 		"composer/composer": "^1.10"
 	}
 }

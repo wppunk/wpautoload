@@ -10,8 +10,7 @@
  * @wordpress-plugin
  */
 
-namespace WP_Autoload;
+define( 'ROOT_DIR', __DIR__ . '/../../' );
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once ROOT_DIR . 'vendor/autoload.php';
 
-\WP_Mock::bootstrap();

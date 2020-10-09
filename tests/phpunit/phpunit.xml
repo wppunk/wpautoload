@@ -1,33 +1,13 @@
-<phpunit
-        bootstrap="./bootstrap.php"
-        backupGlobals="false"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        beStrictAboutTestsThatDoNotTestAnything="false"
->
-    <testsuites>
-        <testsuite name="WP-Autoload-tests">
-            <directory suffix=".php">./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">../../</directory>
-            <exclude>
-                <directory>../../.make</directory>
-                <directory>../../assets</directory>
-                <directory>../../css</directory>
-                <directory>../../dist</directory>
-                <directory>../../js</directory>
-                <directory>../../languages</directory>
-                <directory>../../lib</directory>
-                <directory>../../src</directory>
-                <directory>../../tests</directory>
-                <directory>../../vendor</directory>
-                <directory>../../wp-autoload.php</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./bootstrap.php" backupGlobals="false" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" beStrictAboutTestsThatDoNotTestAnything="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+	<coverage>
+		<include>
+			<directory suffix=".php">../../src/</directory>
+		</include>
+	</coverage>
+	<testsuites>
+		<testsuite name="WP-Autoload-tests">
+			<directory suffix=".php">./tests/</directory>
+		</testsuite>
+	</testsuites>
 </phpunit>
