@@ -2,15 +2,15 @@
 /**
  * Exception for autoload.
  *
- * @package   WP-Autoload
- * @author    Maksym Denysenko
- * @link      https://github.com/mdenisenko/WP-Autoload
+ * @package   WPPunk\Autoload
+ * @author    WPPunk
+ * @link      https://github.com/mdenisenko/WPPunk\Autoload
  * @copyright Copyright (c) 2020
  * @license   GPL-2.0+
  * @wordpress-plugin
  */
 
-namespace WP_Autoload;
+namespace WPPunk\Autoload;
 
 /**
  * Class Exception
@@ -22,13 +22,13 @@ class Exception extends \Exception {
 	/**
 	 * Exception constructor.
 	 *
-	 * @param string $class   Class name.
-	 * @param array  $folders List of folders for autoload.
+	 * @param string $class Class name.
+	 * @param string $path  Correct path.
 	 */
-	public function __construct( string $class, array $folders ) {
+	public function __construct( $class, $path ) {
 		$message = '<strong>Autoload ERROR</strong>: ';
 
-		$message .= '<em>' . $class . '</em> is not found in ' . implode( ', ', $folders ) . '.';
+		$message .= '<em>' . $class . '</em> is not found in ' . $path . '.';
 
 		parent::__construct( $message );
 	}

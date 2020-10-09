@@ -2,20 +2,15 @@
 /**
  * Cache for autoload.
  *
- * @package   WP-Autoload
- * @author    Maksym Denysenko
- * @link      https://github.com/mdenisenko/WP-Autoload
+ * @package   WPPunk\Autoload
+ * @author    WPPunk
+ * @link      https://github.com/mdenisenko/WPPunk\Autoload
  * @copyright Copyright (c) 2020
  * @license   GPL-2.0+
  * @wordpress-plugin
  */
 
-namespace WP_Autoload;
-
-use WP_Filesystem_Direct;
-use function add_action;
-use function plugin_dir_path;
-use function WP_Filesystem;
+namespace WPPunk\Autoload;
 
 /**
  * Class Cache
@@ -47,32 +42,13 @@ class Cache {
 	 * Cache constructor.
 	 */
 	public function __construct() {
-		$this->map_file = plugin_dir_path( __DIR__ ) . 'cache/classmap.php';
+		$this->map_file = __DIR__ . '/../cache/classmap.php';
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		$this->map = @include $this->map_file;
+		if ( file_exists( $this->map_file ) ) {
+			include $this->map_file;
+		}
 		$this->map = is_array( $this->map ) ? $this->map : [];
-		add_action( 'shutdown', [ $this, 'save' ] );
-	}
-
-	/**
-	 * Has valid cache for class.
-	 *
-	 * @param string $class Class name.
-	 *
-	 * @return bool
-	 */
-	private function valid( string $class ): bool {
-		if ( ! isset( $this->map[ $class ] ) ) {
-			return false;
-		}
-
-		if ( ! file_exists( $this->map[ $class ] ) ) {
-			unset( $this->map[ $class ] );
-
-			return false;
-		}
-
-		return true;
+		register_shutdown_function( [ $this, 'save' ] );
 	}
 
 	/**
@@ -82,8 +58,8 @@ class Cache {
 	 *
 	 * @return string
 	 */
-	public function get( string $class ): string {
-		return $this->valid( $class ) ? $this->map[ $class ] : '';
+	public function get( $class ) {
+		return isset( $this->map[ $class ] ) ? $this->map[ $class ] : '';
 	}
 
 	/**
@@ -92,7 +68,7 @@ class Cache {
 	 * @param string $class Class name.
 	 * @param string $path  Path to file.
 	 */
-	public function update( string $class, string $path ) {
+	public function update( $class, $path ) {
 		$this->has_been_update = true;
 		$this->map[ $class ]   = $path;
 	}
@@ -104,40 +80,40 @@ class Cache {
 		if ( ! $this->has_been_update ) {
 			return;
 		}
-		$map = '';
+
+		$this->clear_garbage();
+		if ( ! $this->map ) {
+			return;
+		}
+
+		$map  = '';
+		$last = end( $this->map );
 		foreach ( $this->map as $key => $value ) {
-			$map .= "'$key' => '$value',\n";
+			$map .= "'$key' => '$value'";
+			if ( $value !== $last ) {
+				$map .= ",\n";
+			}
 		}
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$filesystem = $this->WP_Filesystem();
-		if ( ! $filesystem->exists( dirname( $this->map_file ) ) ) {
-			wp_mkdir_p( dirname( $this->map_file ) );
+		if ( ! file_exists( dirname( $this->map_file ) ) ) {
+			mkdir( dirname( $this->map_file ), 0755, true );
 		}
-		$filesystem->put_contents( $this->map_file, '<?php return [' . $map . '];' );
+
+		file_put_contents( $this->map_file, '<?php return [' . $map . '];' );
 	}
 
-	/**
-	 * Create instance WP_Filesystem
-	 *
-	 * @return WP_Filesystem_Direct
-	 *
-	 * phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-	 */
-	private function WP_Filesystem(): WP_Filesystem_Direct {
-		//phpcs:enable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		global $wp_filesystem;
-		if ( null === $wp_filesystem ) {
-			if ( ! class_exists( 'WP_Filesystem_Base' ) ) {
-				// @codeCoverageIgnoreStart
-				require_once ABSPATH . 'wp-admin/includes/file.php';
-				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
-				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
-				// @codeCoverageIgnoreEnd
-			}
-			WP_Filesystem();
+	public function clear_garbage() {
+		if ( ! $this->map ) {
+			return;
 		}
-
-		return new WP_Filesystem_Direct( null );
+		foreach ( $this->map as $key => $file ) {
+			$file = realpath( $file );
+			if ( ! file_exists( $file ) ) {
+				unset( $this->map[ $key ] );
+			} else {
+				$this->map[ $key ] = $file;
+			}
+		}
 	}
 
 }

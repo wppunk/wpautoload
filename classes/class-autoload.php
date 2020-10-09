@@ -2,17 +2,15 @@
 /**
  * Autoload classes, interfaces and traits for your namespaces.
  *
- * @package   WP-Autoload
- * @author    Maksym Denysenko
- * @link      https://github.com/mdenisenko/WP-Autoload
+ * @package   WPPunk\Autoload
+ * @author    WPPunk
+ * @link      https://github.com/mdenisenko/WPPunk\Autoload
  * @copyright Copyright (c) 2020
  * @license   GPL-2.0+
  * @wordpress-plugin
  */
 
-namespace WP_Autoload;
-
-use function wp_die;
+namespace WPPunk\Autoload;
 
 /**
  * Class Autoload
@@ -26,11 +24,11 @@ class Autoload {
 	 */
 	private $prefix;
 	/**
-	 * List of folders for autoload
+	 * Path to folder
 	 *
-	 * @var array
+	 * @var string
 	 */
-	private $folders;
+	private $folder;
 	/**
 	 * Cache
 	 *
@@ -41,14 +39,14 @@ class Autoload {
 	/**
 	 * Autoload constructor.
 	 *
-	 * @param string $prefix  Prefix for your namespace.
-	 * @param array  $folders List of folders for autoload.
-	 * @param Cache  $cache   Cache.
+	 * @param string $prefix Prefix for your namespace.
+	 * @param string $folder Path to folder.
+	 * @param Cache  $cache  Cache.
 	 */
-	public function __construct( string $prefix, array $folders, Cache $cache ) {
-		$this->prefix  = $prefix;
-		$this->folders = $folders;
-		$this->cache   = $cache;
+	public function __construct( $prefix, $folder, Cache $cache ) {
+		$this->prefix = ltrim( $prefix, '\\' );
+		$this->folder = $folder;
+		$this->cache  = $cache;
 		spl_autoload_register( [ $this, 'autoload' ] );
 	}
 
@@ -56,23 +54,21 @@ class Autoload {
 	 * Autoload files for custom plugins
 	 *
 	 * @param string $class Full class name.
+	 *
+	 * @throws Exception Class not found.
 	 */
-	private function autoload( string $class ): void {
-		if ( 0 === strpos( $class, $this->prefix ) ) {
-			$path = $this->cache->get( $class );
-			if ( $path ) {
-				require_once $path;
-			} else {
-				try {
-					$path = $this->file_path( $class );
-					$this->cache->update( $class, $path );
-					require_once $path;
-				} catch ( Exception $e ) {
-					wp_die( wp_kses_post( $e->getMessage() ) );
-				}
-			}
+	private function autoload( $class ) {
+		if ( 0 !== strpos( $class, $this->prefix ) ) {
+			return;
 		}
 
+		$path = $this->cache->get( $class );
+		if ( ! $path ) {
+			$path = $this->file_path( $class );
+			$this->cache->update( $class, $path );
+		}
+
+		require_once $path;
 	}
 
 	/**
@@ -81,9 +77,11 @@ class Autoload {
 	 * @param string $class Full class name.
 	 *
 	 * @return string
+	 *
 	 * @throws Exception Class not found.
 	 */
-	private function file_path( string $class ): string {
+	private function file_path( $class ) {
+		$class        = str_replace( $this->prefix, '', $class );
 		$plugin_parts = explode( '\\', $class );
 		$name         = array_pop( $plugin_parts );
 		$name         = preg_match( '/^(Interface|Trait)/', $name )
@@ -92,14 +90,12 @@ class Autoload {
 		$local_path   = implode( '/', $plugin_parts ) . '/' . $name;
 		$local_path   = strtolower( str_replace( [ '\\', '_' ], [ '/', '-' ], $local_path ) );
 
-		foreach ( $this->folders as $folder ) {
-			$path = $folder . $local_path;
-			if ( file_exists( $path ) ) {
-				return $path;
-			}
+		$path = $this->folder . '/' . $local_path;
+		if ( file_exists( $path ) ) {
+			return $path;
 		}
 
-		throw new Exception( $class, $this->folders );
+		throw new Exception( $class, $path );
 	}
 
 }
