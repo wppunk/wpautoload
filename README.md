@@ -10,13 +10,13 @@ composer require wppunk/wpautoload
 Then add to the `composer.json`:
 ```
 {
-    ...
-    "extra": {
-		"wp-autoload": {
-			"\\Name\\Space\\": "src"
-		}
-	},
-    ...
+  ...
+  "extra": {
+	  "wp-autoload": {
+	    "\\Name\\Space\\": "src"
+	  }
+  },
+  ...
 }
 ```
 Where key it is namespace and value it is the folder name.
