@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/wppunk/wpautoload/badge.svg?branch=master)](https://coveralls.io/github/wppunk/wpautoload?branch=master) ![CI/CD](https://github.com/wppunk/wpautoload/workflows/GitHub%20Actions/badge.svg)](https://github.com/mdenisenko/WP-Autoload)
+[![Coverage Status](https://coveralls.io/repos/github/wppunk/wpautoload/badge.svg?branch=master)](https://coveralls.io/github/wppunk/wpautoload?branch=master) [![CI/CD](https://github.com/wppunk/wpautoload/workflows/GitHub%20Actions/badge.svg)](https://github.com/mdenisenko/WP-Autoload)
 # WordPress Autoload
 Autoload for your classes, interfaces and traits by WordPress Coding Standard.
 
