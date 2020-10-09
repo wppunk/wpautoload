@@ -3,3 +3,4 @@
 vendor
 tests/phpunit/.phpunit.result.cache
 cache
+.phpcs.cache
