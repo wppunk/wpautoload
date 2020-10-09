@@ -31,7 +31,8 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
 		"phpcompatibility/php-compatibility": "^9.3",
 		"brain/monkey": "^2.5",
-		"phpunit/phpunit": "^9.4"
+		"phpunit/phpunit": "^9.4",
+		"php-coveralls/php-coveralls": "^2.4"
 	},
 	"scripts": {
 		"cs": "phpcs --standard=phpcs.xml .",
