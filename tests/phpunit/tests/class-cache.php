@@ -49,8 +49,8 @@ class Test_Cache extends TestCase {
 	public function test_create_dir() {
 		if ( file_exists( ROOT_DIR . 'cache/classmap.php' ) ) {
 			unlink( ROOT_DIR . 'cache/classmap.php' );
+			rmdir( ROOT_DIR . 'cache/' );
 		}
-		rmdir( ROOT_DIR . 'cache/' );
 		$cache = new Cache();
 		$cache->update( '\Prefix\Autoload_Success_1', __DIR__ . '/../classes/path-1/prefix/class-autoload-success-1.php' );
 		$cache->save();
