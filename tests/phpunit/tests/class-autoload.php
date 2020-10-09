@@ -28,7 +28,7 @@ class Test_Autoload extends TestCase {
 	/**
 	 * End test
 	 */
-	public function tearDown(): void {
+	public function tearDown(): void { // phpcs:ignore PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations.voidFound
 		Mockery::close();
 		parent::tearDown();
 	}
