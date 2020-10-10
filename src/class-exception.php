@@ -2,20 +2,29 @@
 /**
  * Exception for autoload.
  *
- * @package   WPPunk\Autoload
+ * @package   wppunk/wpautoload
  * @author    WPPunk
- * @link      https://github.com/mdenisenko/WPPunk\Autoload
+ * @link      https://github.com/wppunk/wpautoload/
  * @copyright Copyright (c) 2020
  * @license   GPL-2.0+
- * @wordpress-plugin
  */
 
 namespace WPPunk\Autoload;
 
 /**
+ * @codeCoverageIgnore
+ */
+if ( class_exists( '\WPPunk\Autoload\Exception' ) ) {
+	return;
+}
+/**
+ * @codingStandardsIgnoreEnd
+ */
+
+/**
  * Class Exception
  *
- * @package Autoload
+ * @package wppunk/wpautoload
  */
 class Exception extends \Exception {
 

@@ -2,12 +2,11 @@
 /**
  * Test exception
  *
- * @package   WP-Autoload
- * @author    Maksym Denysenko
- * @link      https://github.com/mdenisenko/WP-Autoload
+ * @package   wppunk/wpautoload
+ * @author    WPPunk
+ * @link      https://github.com/wppunk/wpautoload/
  * @copyright Copyright (c) 2020
  * @license   GPL-2.0+
- * @wordpress-plugin
  */
 
 use PHPUnit\Framework\TestCase;
