@@ -52,7 +52,6 @@ class Cache {
 	 */
 	public function __construct() {
 		$this->map_file = __DIR__ . '/../cache/classmap.php';
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( file_exists( $this->map_file ) ) {
 			include $this->map_file;
 		}
