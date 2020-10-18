@@ -9,15 +9,11 @@
  * @license   GPL-2.0+
  */
 
-use Prefix\Autoload_Fail;
 use WPPunk\Autoload\Autoload;
 use Prefix\Autoload_Success_2;
-use Prefix\Autoload_Success_3;
-use Prefix\Autoload_Success_4;
 use Prefix\Autoload_Success_1;
+use Prefix\Autoload_Success_3;
 use PHPUnit\Framework\TestCase;
-
-require_once __DIR__ . '/../../../src/class-autoload.php';
 
 /**
  * Class Test_Autoload
@@ -57,15 +53,7 @@ class Test_Autoload extends TestCase {
 	 * Test success load class by path in first folder inside cache.
 	 */
 	public function test_success_load_by_first_path() {
-		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( '' );
-		$cache->shouldReceive( 'update' )->once();
-
-		$autoload = new Autoload(
-			self::PREFIX,
-			self::FOLDER1,
-			$cache
-		);
+		$autoload = new Autoload( self::PREFIX, self::FOLDER1 );
 		new Autoload_Success_1();
 
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
@@ -75,33 +63,18 @@ class Test_Autoload extends TestCase {
 	 * Test success load class by path in second folder inside cache
 	 */
 	public function test_success_load_by_second_path() {
-		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( '' );
-		$cache->shouldReceive( 'update' )->once();
-
-		$autoload = new Autoload(
-			self::PREFIX,
-			self::FOLDER2,
-			$cache
-		);
+		$autoload = new Autoload( self::PREFIX, self::FOLDER2 );
 		new Autoload_Success_2();
 
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}
 
 	/**
-	 * Test success load class from cache.
+	 * Test loading interface
 	 */
-	public function test_success_load_from_cache() {
-		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( __DIR__ . '/../classes/path-1/prefix/class-autoload-success-4.php' );
-
-		$autoload = new Autoload(
-			self::PREFIX,
-			self::FOLDER1,
-			$cache
-		);
-		new Autoload_Success_4();
+	public function test_success_load_interface() {
+		$autoload = new Autoload( self::PREFIX, self::FOLDER1 );
+		new Autoload_Success_3();
 
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 	}
@@ -110,11 +83,7 @@ class Test_Autoload extends TestCase {
 	 * Test invalid namespace.
 	 */
 	public function test_invalid_namespace() {
-		$autoload = new Autoload(
-			self::PREFIX,
-			self::FOLDER1,
-			Mockery::mock( 'WPPunk\Autoload\Cache' )
-		);
+		$autoload = new Autoload( self::PREFIX, self::FOLDER1 );
 		function test_autoload( $class ) {
 			if ( 'Invalid_Name_Space' !== $class ) {
 				return;
@@ -127,42 +96,6 @@ class Test_Autoload extends TestCase {
 
 		spl_autoload_unregister( [ $autoload, 'autoload' ] );
 		spl_autoload_unregister( 'test_autoload' );
-	}
-
-	/**
-	 * Test loading interface
-	 */
-	public function test_success_load_interface() {
-		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( '' );
-		$cache->shouldReceive( 'update' );
-
-		$autoload = new Autoload(
-			self::PREFIX,
-			self::FOLDER1,
-			$cache
-		);
-		new Autoload_Success_3();
-
-		spl_autoload_unregister( [ $autoload, 'autoload' ] );
-	}
-
-	/**
-	 * Test invalid class path.
-	 *
-	 * @noinspection PhpUndefinedClassInspection
-	 */
-	public function test_fail_load() {
-		$cache = Mockery::mock( 'WPPunk\Autoload\Cache' );
-		$cache->shouldReceive( 'get' )->andReturn( '' );
-
-		new Autoload(
-			self::PREFIX,
-			self::FOLDER1,
-			$cache
-		);
-		$this->expectException( WPPunk\Autoload\Exception::class );
-		new Autoload_Fail();
 	}
 
 }
