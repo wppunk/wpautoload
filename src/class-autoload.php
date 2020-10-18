@@ -40,16 +40,24 @@ class Autoload {
 	 * @var string
 	 */
 	private $folder;
+	/**
+	 * Cache
+	 *
+	 * @var Cache
+	 */
+	private $cache;
 
 	/**
 	 * Autoload constructor.
 	 *
 	 * @param string $prefix Prefix for your namespace.
 	 * @param string $folder Path to folder.
+	 * @param Cache  $cache  Cache.
 	 */
-	public function __construct( $prefix, $folder ) {
+	public function __construct( $prefix, $folder, Cache $cache ) {
 		$this->prefix = ltrim( $prefix, '\\' );
 		$this->folder = $folder;
+		$this->cache  = $cache;
 		spl_autoload_register( [ $this, 'autoload' ] );
 	}
 
@@ -60,12 +68,23 @@ class Autoload {
 	 *
 	 * @throws Exception Class not found.
 	 */
-	public function autoload( $class ) {
+	private function autoload( $class ) {
 		if ( 0 !== strpos( $class, $this->prefix ) ) {
 			return;
 		}
 
-		require_once $this->file_path( $class );
+		$path = $this->cache->get( $class );
+		if ( $path ) {
+			require_once $path;
+
+			return;
+		}
+
+		$path = $this->file_path( $class );
+
+		require_once $path;
+
+		$this->cache->update( $class, $path );
 	}
 
 	/**
@@ -74,6 +93,8 @@ class Autoload {
 	 * @param string $class Full class name.
 	 *
 	 * @return string
+	 *
+	 * @throws Exception Class not found.
 	 */
 	private function file_path( $class ) {
 		$class        = str_replace( $this->prefix, '', $class );
@@ -86,8 +107,11 @@ class Autoload {
 		$local_path   = strtolower( str_replace( [ '\\', '_' ], [ '/', '-' ], $local_path ) );
 
 		$path = $this->folder . '/' . $local_path;
+		if ( file_exists( $path ) ) {
+			return $path;
+		}
 
-		return $path;
+		throw new Exception( $class, $path );
 	}
 
 }

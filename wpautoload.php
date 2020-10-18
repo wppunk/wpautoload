@@ -10,6 +10,7 @@
  */
 
 use Composer\Factory;
+use WPPunk\Autoload\Cache;
 use Composer\Json\JsonFile;
 use WPPunk\Autoload\Autoload;
 
@@ -19,8 +20,9 @@ if ( empty( $content['extra']['wp-autoload'] ) ) {
 	return;
 }
 
-$dir = dirname( Factory::getComposerFile() ) . '/';
+$dir   = dirname( Factory::getComposerFile() ) . '/';
+$cache = new Cache();
 
 foreach ( $content['extra']['wp-autoload'] as $prefix => $folder ) {
-	new Autoload( $prefix, $dir . $folder );
+	new Autoload( $prefix, $dir . $folder, $cache );
 }
