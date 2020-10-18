@@ -111,6 +111,7 @@ class Autoload {
 			return $path;
 		}
 
+		$this->cache->clear_garbage();
 		throw new Exception( $class, $path );
 	}
 
