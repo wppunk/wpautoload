@@ -14,13 +14,14 @@ use WPPunk\Autoload\Cache;
 use Composer\Json\JsonFile;
 use WPPunk\Autoload\Autoload;
 
-$file    = new JsonFile( Factory::getComposerFile() );
+$baseDir = dirname( __FILE__, 4 );
+$file    = new JsonFile( $baseDir . '/' . Factory::getComposerFile() );
 $content = $file->read();
 if ( empty( $content['extra']['wp-autoload'] ) ) {
 	return;
 }
 
-$dir   = dirname( Factory::getComposerFile() ) . '/';
+$dir   = $baseDir . '/';
 $cache = new Cache();
 
 foreach ( $content['extra']['wp-autoload'] as $prefix => $folder ) {
