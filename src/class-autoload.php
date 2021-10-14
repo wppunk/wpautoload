@@ -68,7 +68,7 @@ class Autoload {
 	 *
 	 * @throws Exception Class not found.
 	 */
-	private function autoload( $class ) {
+	public function autoload( $class ) {
 		if ( 0 !== strpos( $class, $this->prefix ) ) {
 			return;
 		}
