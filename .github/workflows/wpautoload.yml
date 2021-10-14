@@ -20,7 +20,7 @@ jobs:
               run: composer cs
 
             - name: Tests coverage
-              run: vendor/phpunit/phpunit/phpunit --configuration tests/phpunit/phpunit.xml --coverage-clover coverage.xml
+              run: XDEBUG_MODE=coverage vendor/phpunit/phpunit/phpunit --configuration tests/phpunit/phpunit.xml --coverage-clover coverage.xml
 
             - name: Send to coveralls
               run: php vendor/bin/php-coveralls -v
